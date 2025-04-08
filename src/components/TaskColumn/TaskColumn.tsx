@@ -73,8 +73,8 @@ export const TaskColumn = ({
       </Header>
 
       <Body>
-        {filteredTasks.map((task, i) => (
-          <Task key={i} />
+        {filteredTasks.map((task) => (
+          <Task key={task.taskName} />
         ))}
 
         <AddTaskButton

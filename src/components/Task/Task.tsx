@@ -3,7 +3,7 @@ import { TrashIcon } from '../../icons/TrashIcon';
 import { Lozenge } from '../Lozenge/Lozenge';
 import { ZapIcon } from '../../icons/ZapIcon';
 import * as Styled from './Task.Styled';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { EditFieldButton } from '../EditFieldButton/EditFieldButton';
 import { UserIcon } from '../../icons/UserIcon';
 import { CalendarIcon } from '../../icons/CalendarIcon';
