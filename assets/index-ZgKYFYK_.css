@@ -1,0 +1,1 @@
+:root{--text-primary: rgba(33, 33, 33, 1);--text-secondary: rgba(71, 71, 71, 1);--text-warning: rgba(141, 95, 1, 1);--background-warning: rgba(255, 247, 214, 1)}button,p,h2,input,textarea{all:unset}*{box-sizing:border-box}body{font-family:Inter,sans-serif;font-weight:400}
