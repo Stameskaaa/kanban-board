@@ -16,6 +16,7 @@ const Container = styled.div`
   gap: 20px;
   flex-grow: 1;
   flex: 1;
+  min-width: 0;
 `;
 
 const Header = styled.h2`

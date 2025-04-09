@@ -21,6 +21,10 @@ const ProgressBar = styled.div`
   height: 20px;
   font-weight: 500;
   color: rgba(0, 0, 0, 1);
+
+  @media (width < 1200px) {
+    padding-bottom: 20px;
+  }
 `;
 
 const Percentage = styled.span`

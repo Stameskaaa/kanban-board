@@ -2,8 +2,9 @@ import styled from 'styled-components';
 import { ellipsisText, flexCenter, flexColumn } from '../../styles/mixins';
 
 export const Container = styled.div`
-  width: 100%;
   cursor: pointer;
+  min-width: 0;
+  max-width: 100%;
   ${flexColumn}
   gap: 16px;
   border-radius: 16px;
@@ -24,6 +25,7 @@ export const HeaderTitle = styled.p`
   font-weight: 600;
   flex-grow: 1;
   min-width: 0;
+  max-width: 100%;
   font-size: 16px;
   line-height: 20px;
   color: var(--text-primary);

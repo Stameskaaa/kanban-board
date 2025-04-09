@@ -10,6 +10,17 @@ const BoardContainer = styled.div`
   gap: 16px;
   height: 100%;
   height: calc(100vh - 122px);
+  @media (width < 1200px) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    height: auto;
+  }
+
+  @media (width < 768px) {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
 `;
 
 export const TaskBoard = () => {
