@@ -6,12 +6,10 @@ interface AddTaskButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   icon?: ReactNode;
   buttonText: string;
   color: string;
-  borderColor: string;
 }
 
 interface StyledButtonProps {
   color: string;
-  borderColor: string;
 }
 
 const Button = styled.button<StyledButtonProps>`
@@ -21,7 +19,7 @@ const Button = styled.button<StyledButtonProps>`
   gap: 9px;
   border-radius: 12px;
   color: ${({ color }) => color};
-  border: 1px solid ${({ borderColor }) => borderColor};
+  border: 1px solid ${({ color }) => color};
   cursor: pointer;
   font-family: Inter;
   font-weight: 500;
@@ -29,17 +27,19 @@ const Button = styled.button<StyledButtonProps>`
   line-height: 24px;
   background-color: transparent;
   box-sizing: border-box;
+  svg path {
+    fill: ${({ color }) => color};
+  }
 `;
 
 export const AddTaskButton: React.FC<AddTaskButtonProps> = ({
   icon,
   buttonText,
   color,
-  borderColor,
   ...props
 }) => {
   return (
-    <Button color={color} borderColor={borderColor} {...props}>
+    <Button color={color} {...props}>
       {icon && icon} {buttonText}
     </Button>
   );

@@ -1,33 +1,45 @@
 import { SuccessIcon } from '../../icons/SuccessIcon';
 import { TrashIcon } from '../../icons/TrashIcon';
 import { Lozenge } from '../Lozenge/Lozenge';
-import { ZapIcon } from '../../icons/ZapIcon';
-import * as Styled from './Task.Styled';
+import * as Styled from './TaskComponent.Styled';
 import { useState } from 'react';
 import { EditFieldButton } from '../EditFieldButton/EditFieldButton';
 import { UserIcon } from '../../icons/UserIcon';
 import { CalendarIcon } from '../../icons/CalendarIcon';
 import { ListOrderIcon } from '../../icons/ListOrderIcon';
 import { NotePadIcon } from '../../icons/NotePadIcon';
+import { LozengeProps, Task } from '../../types/types';
+import { TASK_DICTIONARY } from '../../constants/taskDictionary';
+import { useDispatch } from 'react-redux';
+import { updateTask } from '../../store/taskSlice';
 
-export const Task = () => {
+interface ExtendedTask extends Task {
+  index: number;
+  icon: React.ComponentType<any>;
+  iconProps: LozengeProps;
+}
+
+export const TaskComponent: React.FC<ExtendedTask> = ({
+  index,
+  taskName,
+  assigneeId,
+  description,
+  dueDate,
+  priorityId,
+  icon: Icon,
+  iconProps,
+}) => {
   const [isEditing, setIsEditing] = useState(false);
+  const dispatch = useDispatch();
+  const assignee = TASK_DICTIONARY.assignees[assigneeId];
+  const priority = TASK_DICTIONARY.priorities[priorityId];
 
-  // Стейт для хранения данных
-  const [taskName, setTaskName] = useState('Регистрация/Вход на компонентах');
-  const [assignee, setAssignee] = useState('Денис Иванов');
-  const [date, setDate] = useState('04/04/25');
-  const [priority, setPriority] = useState('Medium');
-  const [description, setDescription] = useState(
-    'Некоторое описание задачи небольшое, которое умещается в 2-3 строки',
-  );
+  const handleFieldChange = (field: keyof Task, value: string) => {
+    const numericFields: (keyof Task)[] = ['assigneeId', 'priorityId', 'statusId'];
+    const newValue = numericFields.includes(field) ? Number(value) : value;
 
-  // Функции для обновления данных
-  const handleTaskNameChange = (newTaskName: string) => setTaskName(newTaskName);
-  const handleAssigneeChange = (newAssignee: string) => setAssignee(newAssignee);
-  const handleDateChange = (newDate: string) => setDate(newDate);
-  const handlePriorityChange = (newPriority: string) => setPriority(newPriority);
-  const handleDescriptionChange = (newDescription: string) => setDescription(newDescription);
+    dispatch(updateTask({ index, updatedTask: { [field]: newValue } }));
+  };
 
   return (
     <Styled.Container onDoubleClick={() => setIsEditing((prev) => !prev)}>
@@ -38,7 +50,7 @@ export const Task = () => {
         ) : (
           <Styled.HeaderTitleEdit
             value={taskName}
-            onChange={(e) => handleTaskNameChange(e.target.value)}
+            onChange={(e) => handleFieldChange('taskName', e.target.value)}
           />
         )}
         <Styled.TrashButton>
@@ -56,20 +68,15 @@ export const Task = () => {
               </Styled.NameContainer>
             )}
             <Styled.Point>•</Styled.Point>
-            <Styled.Date>{date}</Styled.Date>
+            <Styled.Date>{dueDate}</Styled.Date>
           </Styled.AssigneeInfo>
           <Styled.TaskStatus>
             <Lozenge
               bgColor="var(--background-warning)"
               color="var(--text-warning)"
-              text={priority}
+              text={priority} //TODO fix
             />
-            <Lozenge
-              text="В ожидании"
-              icon={<ZapIcon />}
-              bgColor="rgba(212, 247, 243, 1)"
-              color="rgba(11, 111, 98, 1)"
-            />
+            <Icon {...iconProps} />
           </Styled.TaskStatus>
           <Styled.TaskDescription>{description}</Styled.TaskDescription>
         </>
@@ -79,29 +86,29 @@ export const Task = () => {
             variant="text"
             icon={<UserIcon />}
             buttonText="Добавить ответственного"
-            editData={assignee}
-            setNewData={handleAssigneeChange}
+            editData={assignee || ''}
+            setNewData={(val) => handleFieldChange('assigneeId', val)}
           />
           <EditFieldButton
             variant="date"
             icon={<CalendarIcon />}
             buttonText="Добавить дату"
-            editData={date}
-            setNewData={handleDateChange}
+            editData={dueDate}
+            setNewData={(val) => handleFieldChange('dueDate', val)}
           />
           <EditFieldButton
             variant="priority"
             icon={<ListOrderIcon />}
             buttonText="Добавить приоритет"
-            editData={priority}
-            setNewData={handlePriorityChange}
+            editData={priority || ''}
+            setNewData={(val) => handleFieldChange('priorityId', val)}
           />
           <EditFieldButton
             variant="longText"
             icon={<NotePadIcon />}
             buttonText="Добавить описание"
             editData={description}
-            setNewData={handleDescriptionChange}
+            setNewData={(val) => handleFieldChange('description', val)}
           />
         </div>
       )}

@@ -1,12 +1,5 @@
-import { ReactNode } from 'react';
 import styled from 'styled-components';
-
-interface LozengeProps {
-  text: string;
-  icon?: ReactNode;
-  bgColor: string;
-  color: string;
-}
+import { LozengeProps } from '../../types/types';
 
 const LozengeContainer = styled.div<{ bgColor: string; color: string }>`
   background-color: ${({ bgColor }) => bgColor};
@@ -19,6 +12,9 @@ const LozengeContainer = styled.div<{ bgColor: string; color: string }>`
   border-radius: 999px;
   font-weight: 500;
   text-align: center;
+  svg path {
+    fill: ${({ color }) => color};
+  }
 `;
 
 export const Lozenge: React.FC<LozengeProps> = ({ text, icon, bgColor, color }) => {

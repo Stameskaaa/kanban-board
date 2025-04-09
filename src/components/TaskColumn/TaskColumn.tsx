@@ -2,14 +2,20 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Lozenge } from '../Lozenge/Lozenge';
 import { AddTaskButton } from '../AddTaskButton/AddTaskButton';
-import { Task } from '../Task/Task';
+import { TaskComponent } from '../TaskComponent/TaskComponent';
 import { flexColumn } from '../../styles/mixins';
 import { ReactNode } from 'react';
 import { RootState } from '../../store';
+import { PlusIcon } from '../../icons/PlusIcon';
+import { Task } from '../../types/types';
 
 const Container = styled.div`
   ${flexColumn}
   gap: 20px;
+  min-height: 100%;
+  overflow-y: auto;
+  flex-grow: 1;
+  flex: 1;
 `;
 
 const Header = styled.h2`
@@ -25,41 +31,32 @@ const Count = styled.span`
   font-weight: 500;
 `;
 
-const Body = styled.div`
+const Body = styled.div<{ bgColor: string }>`
   ${flexColumn}
   gap: 16px;
   border-radius: 20px;
   padding: 12px;
-  background: rgba(245, 250, 249, 1);
+  background-color: ${({ bgColor }) => bgColor};
 `;
-
-type Task = {
-  taskName: string;
-  description: string;
-  assigneeId: number;
-  dueDate: string;
-  priorityId: number;
-  statusId: number;
-};
 
 interface TaskColumnProps {
   statusKey: string;
   title: string;
   icon: ReactNode;
+  bgColor: string;
   badgeColor: string;
   badgeBgColor: string;
   buttonColor: string;
-  buttonBorderColor: string;
 }
 
 export const TaskColumn = ({
   statusKey,
   title,
   icon,
+  bgColor,
   badgeColor,
   badgeBgColor,
   buttonColor,
-  buttonBorderColor,
 }: TaskColumnProps) => {
   const { tasks } = useSelector((state: RootState) => state.tasks);
 
@@ -72,17 +69,23 @@ export const TaskColumn = ({
         <Count>{filteredTasks.length}</Count>
       </Header>
 
-      <Body>
-        {filteredTasks.map((task) => (
-          <Task key={task.taskName} />
+      <Body bgColor={bgColor}>
+        {filteredTasks.map((task, index) => (
+          <TaskComponent
+            index={index} //TODO fix
+            icon={Lozenge}
+            iconProps={{
+              text: title,
+              icon: icon,
+              bgColor: badgeBgColor,
+              color: badgeColor,
+            }}
+            key={index}
+            {...task}
+          />
         ))}
 
-        <AddTaskButton
-          icon={icon}
-          buttonText="Новая задача"
-          color={buttonColor}
-          borderColor={buttonBorderColor}
-        />
+        <AddTaskButton icon={<PlusIcon />} buttonText="Новая задача" color={buttonColor} />
       </Body>
     </Container>
   );

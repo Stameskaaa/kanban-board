@@ -1,20 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { initialTasks } from '../data/initialTasks';
-
-type Task = {
-  taskName: string;
-  description: string;
-  assigneeId: number;
-  dueDate: string;
-  priorityId: number;
-  statusId: number;
-};
+import { Task } from '../types/types';
 
 type TasksState = {
   tasks: Task[];
 };
 
 const initialState: TasksState = {
+  //@ts-ignore
   tasks: initialTasks,
 };
 
