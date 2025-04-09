@@ -1,11 +1,10 @@
 import React, { ReactNode, useState, useRef } from 'react';
-import styled from 'styled-components';
-import { ellipsisText } from '../../styles/mixins';
 import { TextEditDropDown } from './Dropdowns/TextEditDropDown';
 import { DateEditDropDown } from './Dropdowns/DateEditDropDown';
 import { PriorityEditDropDown } from './Dropdowns/PriorityEditDropDown';
 import { LongTextEditDropDown } from './Dropdowns/LongTextEditDropDown';
 import { SelectAssigneeDropDown } from './Dropdowns/SelectAssigneeDropDown';
+import { Button, ButtonText, Wrapper } from './EditFieldButton.Styled';
 
 type EditFieldVariants = 'priority' | 'text' | 'date' | 'longText' | 'selector';
 
@@ -16,42 +15,6 @@ interface EditFieldButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElem
   setNewData: (newData: string) => void;
   variant: EditFieldVariants;
 }
-
-const Wrapper = styled.div`
-  width: 100%;
-  position: relative;
-`;
-
-const Button = styled.button`
-  box-sizing: border-box;
-  width: 100%;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  border-radius: 4px;
-  padding: 8px;
-
-  font-family: Inter;
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 16px;
-  color: rgba(71, 71, 71, 1);
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-
-  &:hover,
-  &:focus {
-    background-color: rgba(237, 237, 237, 1);
-  }
-
-  &:active {
-    background-color: rgba(217, 217, 217, 1);
-  }
-`;
-
-const ButtonText = styled.span`
-  ${ellipsisText}
-`;
 
 export const EditFieldButton: React.FC<EditFieldButtonProps> = ({
   icon,

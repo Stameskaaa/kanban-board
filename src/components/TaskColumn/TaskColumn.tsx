@@ -1,46 +1,14 @@
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
 import { Lozenge } from '../Lozenge/Lozenge';
 import { AddTaskButton } from '../AddTaskButton/AddTaskButton';
 import { TaskComponent } from '../TaskComponent/TaskComponent';
-import { flexColumn } from '../../styles/mixins';
 import { ReactNode } from 'react';
 import { RootState } from '../../store';
 import { PlusIcon } from '../../icons/PlusIcon';
 import { statuses, Task } from '../../types/types';
 import { addTask } from '../../store/taskSlice';
 import { Droppable } from '@hello-pangea/dnd';
-
-const Container = styled.div`
-  ${flexColumn}
-  gap: 20px;
-  flex-grow: 1;
-  flex: 1;
-  min-width: 0;
-`;
-
-const Header = styled.h2`
-  width: 100%;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-`;
-
-const Count = styled.span`
-  color: rgba(105, 105, 105, 1);
-  font-size: 14px;
-  font-weight: 500;
-`;
-
-const Body = styled.div<{ bgColor: string }>`
-  ${flexColumn}
-  gap: 16px;
-  overflow-y: auto;
-  min-height: calc(100% - 45px);
-  border-radius: 20px;
-  padding: 12px;
-  background-color: ${({ bgColor }) => bgColor};
-`;
+import { Body, Container, Count, Header } from './TaskColumn.Styled';
 
 interface TaskColumnProps {
   statusKey: string;
