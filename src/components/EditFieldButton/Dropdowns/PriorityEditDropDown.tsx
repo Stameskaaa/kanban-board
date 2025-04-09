@@ -81,14 +81,14 @@ export const PriorityEditDropDown = forwardRef<HTMLDivElement, PriorityEditDropD
 
         <List>
           <Title>Выберите приоритет</Title>
-          <ButtonWrapper onClick={() => handleClick('0')}>
+          <ButtonWrapper onClick={() => handleClick('1')}>
             <Lozenge
               text="Medium"
               color={TASK_DICTIONARY.prioritiesColors[1].color}
               bgColor={TASK_DICTIONARY.prioritiesColors[1].bgColor}
             />
           </ButtonWrapper>
-          <ButtonWrapper onClick={() => handleClick('1')}>
+          <ButtonWrapper onClick={() => handleClick('2')}>
             <Lozenge
               text="High"
               color={TASK_DICTIONARY.prioritiesColors[2].color}
@@ -96,7 +96,7 @@ export const PriorityEditDropDown = forwardRef<HTMLDivElement, PriorityEditDropD
             />
           </ButtonWrapper>
 
-          <ButtonWrapper onClick={() => handleClick('2')}>
+          <ButtonWrapper onClick={() => handleClick('0')}>
             <Lozenge
               text="Low"
               color={TASK_DICTIONARY.prioritiesColors[0].color}

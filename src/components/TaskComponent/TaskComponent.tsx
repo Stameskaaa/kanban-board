@@ -36,7 +36,15 @@ export const TaskComponent: React.FC<ExtendedTask> = ({
 
   const handleFieldChange = (field: keyof Task, value: string) => {
     const numericFields: (keyof Task)[] = ['assigneeId', 'priorityId', 'statusId'];
-    const newValue = numericFields.includes(field) ? Number(value) : value;
+    let newValue: string | number = value;
+
+    if (numericFields.includes(field)) {
+      const parsedValue = Number(value);
+      newValue = isNaN(parsedValue) ? value : parsedValue;
+    }
+
+    console.log(newValue);
+
     dispatch(updateTask({ id: taskId, updatedTask: { [field]: newValue } }));
   };
 
