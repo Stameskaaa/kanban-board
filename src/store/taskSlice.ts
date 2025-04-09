@@ -40,8 +40,7 @@ const tasksSlice = createSlice({
         taskId: string;
       }>,
     ) => {
-      const { sourceStatusId, destinationStatusId, sourceIndex, destinationIndex, taskId } =
-        action.payload;
+      const { sourceStatusId, destinationStatusId, sourceIndex, destinationIndex } = action.payload;
 
       // Если задача перемещается внутри одной колонки
       if (sourceStatusId === destinationStatusId) {

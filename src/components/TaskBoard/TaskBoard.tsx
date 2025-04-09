@@ -3,8 +3,7 @@ import { TASK_DICTIONARY } from '../../constants/taskDictionary';
 import styled from 'styled-components';
 import { DragDropContext } from '@hello-pangea/dnd';
 import { useDispatch } from 'react-redux';
-import { reorderTasks, updateTask } from '../../store/taskSlice';
-import { statuses } from '../../types/types';
+import { reorderTasks } from '../../store/taskSlice';
 
 const BoardContainer = styled.div`
   display: flex;
