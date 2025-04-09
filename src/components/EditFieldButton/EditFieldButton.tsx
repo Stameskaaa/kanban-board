@@ -104,7 +104,10 @@ export const EditFieldButton: React.FC<EditFieldButtonProps> = ({
         <EditFieldComponent
           ref={dropDownRef as any}
           onBlur={handleBlur}
-          onChange={(e) => setNewData(e.target.value)}
+          onChange={(e) => {
+            const target = e.target as HTMLInputElement;
+            setNewData(target.value);
+          }}
           value={editData}
         />
       )}

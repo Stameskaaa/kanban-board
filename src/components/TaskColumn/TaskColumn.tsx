@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Lozenge } from '../Lozenge/Lozenge';
 import { AddTaskButton } from '../AddTaskButton/AddTaskButton';
@@ -7,13 +7,12 @@ import { flexColumn } from '../../styles/mixins';
 import { ReactNode } from 'react';
 import { RootState } from '../../store';
 import { PlusIcon } from '../../icons/PlusIcon';
-import { Task } from '../../types/types';
+import { statuses, Task } from '../../types/types';
+import { addTask } from '../../store/taskSlice';
 
 const Container = styled.div`
   ${flexColumn}
   gap: 20px;
-  min-height: 100%;
-  overflow-y: auto;
   flex-grow: 1;
   flex: 1;
 `;
@@ -34,6 +33,9 @@ const Count = styled.span`
 const Body = styled.div<{ bgColor: string }>`
   ${flexColumn}
   gap: 16px;
+  overflow-y: auto;
+  min-height: calc(100% - 45px);
+
   border-radius: 20px;
   padding: 12px;
   background-color: ${({ bgColor }) => bgColor};
@@ -58,9 +60,25 @@ export const TaskColumn = ({
   badgeBgColor,
   buttonColor,
 }: TaskColumnProps) => {
+  const dispatch = useDispatch();
   const { tasks } = useSelector((state: RootState) => state.tasks);
 
   const filteredTasks = tasks.filter((task: Task) => task.statusId === Number(statusKey));
+
+  const handleAddTask = () => {
+    const randomId = Math.random().toString(36).substring(2, 9);
+    dispatch(
+      addTask({
+        id: randomId,
+        taskName: 'Новая задача',
+        assigneeId: 1,
+        dueDate: '',
+        priorityId: 0,
+        description: '',
+        statusId: Number(statusKey) as statuses,
+      }),
+    );
+  };
 
   return (
     <Container>
@@ -70,9 +88,9 @@ export const TaskColumn = ({
       </Header>
 
       <Body bgColor={bgColor}>
-        {filteredTasks.map((task, index) => (
+        {filteredTasks.map((task) => (
           <TaskComponent
-            index={index} //TODO fix
+            taskId={task.id}
             icon={Lozenge}
             iconProps={{
               text: title,
@@ -80,12 +98,17 @@ export const TaskColumn = ({
               bgColor: badgeBgColor,
               color: badgeColor,
             }}
-            key={index}
+            key={task.id}
             {...task}
           />
         ))}
 
-        <AddTaskButton icon={<PlusIcon />} buttonText="Новая задача" color={buttonColor} />
+        <AddTaskButton
+          icon={<PlusIcon />}
+          buttonText="Новая задача"
+          color={buttonColor}
+          onClick={handleAddTask}
+        />
       </Body>
     </Container>
   );

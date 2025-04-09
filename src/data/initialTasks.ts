@@ -1,5 +1,6 @@
 export const initialTasks = [
   {
+    id: 'task-1',
     taskName: 'Создать компонент Segmented Control',
     description:
       'Реализовать компонент с кнопками для оценки. Добавить возможность переключения между значениями.',
@@ -9,6 +10,7 @@ export const initialTasks = [
     statusId: 1,
   },
   {
+    id: 'task-2',
     taskName: 'Настроить Storybook',
     description: 'Настроить Storybook с нуля для React проекта с использованием TypeScript.',
     assigneeId: 2,
@@ -17,6 +19,7 @@ export const initialTasks = [
     statusId: 3,
   },
   {
+    id: 'task-3',
     taskName: 'Создать компонент кнопки',
     description: 'Создать стилизованный компонент кнопки с использованием Styled-components.',
     assigneeId: 3,
@@ -25,6 +28,7 @@ export const initialTasks = [
     statusId: 1,
   },
   {
+    id: 'task-4',
     taskName: 'Реализовать компонент карточки',
     description:
       'Создать компонент карточки задачи с возможностью изменения статуса и редактирования описания.',
@@ -34,6 +38,7 @@ export const initialTasks = [
     statusId: 0,
   },
   {
+    id: 'task-5',
     taskName: 'Создать страницу дашборда',
     description: 'Сверстать страницу дашборда с отображением списка задач.',
     assigneeId: 3,
@@ -42,6 +47,7 @@ export const initialTasks = [
     statusId: 0,
   },
   {
+    id: 'task-6',
     taskName: 'Настроить глобальные стили',
     description: 'Создать файл со стилями и подключить его к проекту.',
     assigneeId: 2,
@@ -50,6 +56,7 @@ export const initialTasks = [
     statusId: 2,
   },
   {
+    id: 'task-7',
     taskName: 'Создать компонент таблицы',
     description:
       'Сделать компонент таблицы для отображения задач с возможностью сортировки и фильтрации.',
@@ -59,6 +66,7 @@ export const initialTasks = [
     statusId: 0,
   },
   {
+    id: 'task-8',
     taskName: 'Реализовать переключение тем',
     description: 'Добавить возможность переключения между светлой и тёмной темами.',
     assigneeId: 2,

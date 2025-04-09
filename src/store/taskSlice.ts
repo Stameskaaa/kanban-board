@@ -7,8 +7,7 @@ type TasksState = {
 };
 
 const initialState: TasksState = {
-  //@ts-ignore
-  tasks: initialTasks,
+  tasks: initialTasks as Task[],
 };
 
 const tasksSlice = createSlice({
@@ -18,12 +17,18 @@ const tasksSlice = createSlice({
     addTask: (state, action: PayloadAction<Task>) => {
       state.tasks.push(action.payload);
     },
-    updateTask: (state, action: PayloadAction<{ index: number; updatedTask: Partial<Task> }>) => {
-      const { index, updatedTask } = action.payload;
-      state.tasks[index] = { ...state.tasks[index], ...updatedTask };
+    updateTask: (state, action: PayloadAction<{ id: string; updatedTask: Partial<Task> }>) => {
+      const { id, updatedTask } = action.payload;
+      const taskIndex = state.tasks.findIndex((task) => task.id === id);
+      if (taskIndex !== -1) {
+        state.tasks[taskIndex] = { ...state.tasks[taskIndex], ...updatedTask };
+      }
     },
-    deleteTask: (state, action: PayloadAction<number>) => {
-      state.tasks.splice(action.payload, 1);
+    deleteTask: (state, action: PayloadAction<string>) => {
+      const taskIndex = state.tasks.findIndex((task) => task.id === action.payload);
+      if (taskIndex !== -1) {
+        state.tasks.splice(taskIndex, 1);
+      }
     },
   },
 });

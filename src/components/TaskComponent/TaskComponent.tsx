@@ -11,16 +11,16 @@ import { NotePadIcon } from '../../icons/NotePadIcon';
 import { LozengeProps, Task } from '../../types/types';
 import { TASK_DICTIONARY } from '../../constants/taskDictionary';
 import { useDispatch } from 'react-redux';
-import { updateTask } from '../../store/taskSlice';
+import { deleteTask, updateTask } from '../../store/taskSlice';
 
 interface ExtendedTask extends Task {
-  index: number;
+  taskId: string;
   icon: React.ComponentType<any>;
   iconProps: LozengeProps;
 }
 
 export const TaskComponent: React.FC<ExtendedTask> = ({
-  index,
+  taskId,
   taskName,
   assigneeId,
   description,
@@ -37,8 +37,11 @@ export const TaskComponent: React.FC<ExtendedTask> = ({
   const handleFieldChange = (field: keyof Task, value: string) => {
     const numericFields: (keyof Task)[] = ['assigneeId', 'priorityId', 'statusId'];
     const newValue = numericFields.includes(field) ? Number(value) : value;
+    dispatch(updateTask({ id: taskId, updatedTask: { [field]: newValue } }));
+  };
 
-    dispatch(updateTask({ index, updatedTask: { [field]: newValue } }));
+  const handleDeleteTask = () => {
+    dispatch(deleteTask(taskId));
   };
 
   return (
@@ -53,7 +56,7 @@ export const TaskComponent: React.FC<ExtendedTask> = ({
             onChange={(e) => handleFieldChange('taskName', e.target.value)}
           />
         )}
-        <Styled.TrashButton>
+        <Styled.TrashButton onClick={handleDeleteTask}>
           <TrashIcon />
         </Styled.TrashButton>
       </Styled.Header>
@@ -72,9 +75,9 @@ export const TaskComponent: React.FC<ExtendedTask> = ({
           </Styled.AssigneeInfo>
           <Styled.TaskStatus>
             <Lozenge
-              bgColor="var(--background-warning)"
-              color="var(--text-warning)"
-              text={priority} //TODO fix
+              bgColor={TASK_DICTIONARY.prioritiesColors[priorityId].bgColor}
+              color={TASK_DICTIONARY.prioritiesColors[priorityId].color}
+              text={priority}
             />
             <Icon {...iconProps} />
           </Styled.TaskStatus>
@@ -100,7 +103,7 @@ export const TaskComponent: React.FC<ExtendedTask> = ({
             variant="priority"
             icon={<ListOrderIcon />}
             buttonText="Добавить приоритет"
-            editData={priority || ''}
+            editData={`${priorityId}` || '0'}
             setNewData={(val) => handleFieldChange('priorityId', val)}
           />
           <EditFieldButton

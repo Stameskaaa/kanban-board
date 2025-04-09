@@ -1,6 +1,7 @@
 import { CalendarIcon } from '../icons/CalendarIcon';
 import { NotePadIcon } from '../icons/NotePadIcon';
 import { ZapIcon } from '../icons/ZapIcon';
+
 export const TASK_DICTIONARY = {
   assignees: {
     '1': 'Иван Иванов',
@@ -11,6 +12,20 @@ export const TASK_DICTIONARY = {
     '0': 'Low',
     '1': 'Medium',
     '2': 'High',
+  },
+  prioritiesColors: {
+    '0': {
+      color: 'rgba(1, 141, 15, 1)',
+      bgColor: 'rgba(214, 255, 216, 1)',
+    },
+    '1': {
+      color: 'var(--text-warning)',
+      bgColor: 'var(--background-warning)',
+    },
+    '2': {
+      color: 'rgba(141, 1, 1, 1)',
+      bgColor: 'rgba(255, 214, 214, 1)',
+    },
   },
   statuses: {
     '0': 'В ожидании',
