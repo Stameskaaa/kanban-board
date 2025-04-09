@@ -13,6 +13,8 @@ import { TASK_DICTIONARY } from '../../constants/taskDictionary';
 import { useDispatch } from 'react-redux';
 import { deleteTask, updateTask } from '../../store/taskSlice';
 import { Draggable } from '@hello-pangea/dnd';
+import { XmarkIcon } from '../../icons/XmarkIcon';
+import { formatDate } from '../../utils/utils';
 
 interface ExtendedTask extends Task {
   taskId: string;
@@ -66,36 +68,46 @@ export const TaskComponent: React.FC<ExtendedTask> = ({
             borderColor: snapshot.isDragging ? 'rgba(83, 123, 243, 1)' : 'transparent',
             borderWidth: '1px',
             borderStyle: 'solid',
-            opacity: snapshot.isDragging ? 0.8 : 1,
             borderRadius: '16px',
           }}>
-          <Styled.Container onDoubleClick={() => setIsEditing((prev) => !prev)}>
+          <Styled.Container onDoubleClick={() => setIsEditing(true)}>
             <Styled.Header>
               <SuccessIcon />
               {!isEditing ? (
-                <Styled.HeaderTitle>{taskName}</Styled.HeaderTitle>
+                <>
+                  {' '}
+                  <Styled.HeaderTitle>{taskName}</Styled.HeaderTitle>
+                  <Styled.IconButtonContainer onClick={handleDeleteTask}>
+                    <TrashIcon />
+                  </Styled.IconButtonContainer>
+                </>
               ) : (
-                <Styled.HeaderTitleEdit
-                  value={taskName}
-                  onChange={(e) => handleFieldChange('taskName', e.target.value)}
-                />
+                <>
+                  <Styled.HeaderTitleEdit
+                    value={taskName}
+                    onChange={(e) => handleFieldChange('taskName', e.target.value)}
+                  />
+                  <Styled.IconButtonContainer onClick={() => setIsEditing(false)}>
+                    <XmarkIcon />
+                  </Styled.IconButtonContainer>
+                </>
               )}
-              <Styled.TrashButton onClick={handleDeleteTask}>
-                <TrashIcon />
-              </Styled.TrashButton>
             </Styled.Header>
 
             {!isEditing ? (
               <>
                 <Styled.AssigneeInfo>
                   {assignee?.length > 0 && (
-                    <Styled.NameContainer>
-                      <Styled.Circle>{assignee.charAt(0).toLocaleUpperCase()}</Styled.Circle>{' '}
-                      <Styled.Name>{assignee}</Styled.Name>
-                    </Styled.NameContainer>
+                    <>
+                      <Styled.NameContainer>
+                        <Styled.Circle>{assignee.charAt(0).toLocaleUpperCase()}</Styled.Circle>{' '}
+                        <Styled.Name>{assignee}</Styled.Name>
+                      </Styled.NameContainer>
+                      <Styled.Point>•</Styled.Point>
+                    </>
                   )}
-                  <Styled.Point>•</Styled.Point>
-                  <Styled.Date>{dueDate}</Styled.Date>
+
+                  <Styled.Date>{formatDate(dueDate)}</Styled.Date>
                 </Styled.AssigneeInfo>
                 <Styled.TaskStatus>
                   <Lozenge
@@ -110,7 +122,7 @@ export const TaskComponent: React.FC<ExtendedTask> = ({
             ) : (
               <div>
                 <EditFieldButton
-                  variant="text"
+                  variant="selector"
                   icon={<UserIcon />}
                   buttonText="Добавить ответственного"
                   editData={assignee || ''}

@@ -1,18 +1,12 @@
 import { forwardRef, HTMLAttributes } from 'react';
 import styled from 'styled-components';
-import { flexColumn } from '../../../styles/mixins';
+import { DropDownContainer, flexColumn } from '../../../styles/mixins';
 import { Lozenge } from '../../Lozenge/Lozenge';
 import { TASK_DICTIONARY } from '../../../constants/taskDictionary';
 
 const PriorityEditField = styled.div`
-  position: absolute;
-  box-sizing: border-box;
-  width: 100%;
-  border-radius: 12px;
-  background-color: rgba(255, 255, 255, 1);
-  box-shadow: 0px 4px 24px 0px rgba(0, 0, 0, 0.08);
-  z-index: 1;
-  top: calc(100% + 1px);
+  ${DropDownContainer}
+  padding: 0;
 `;
 
 const Header = styled.div`
@@ -37,16 +31,22 @@ const List = styled.div`
   border-radius: 0 0 12px 12px;
 `;
 
-const ButtonWrapper = styled.button``;
+const ButtonWrapper = styled.button`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+`;
 
 type PriorityNumber = 0 | 1 | 2;
 type PriorityString = `${PriorityNumber}`;
 
 interface PriorityEditDropDownProps extends HTMLAttributes<HTMLDivElement> {
   value: string;
+  setNewData: (value: string) => void;
 }
 export const PriorityEditDropDown = forwardRef<HTMLDivElement, PriorityEditDropDownProps>(
-  ({ onBlur, value, onChange, ...rest }, ref) => {
+  ({ onBlur, value, setNewData, ...rest }, ref) => {
     const normalizedValue: PriorityString = (
       ['0', '1', '2'].includes(String(value)) ? String(value) : '0'
     ) as PriorityString;
@@ -58,14 +58,7 @@ export const PriorityEditDropDown = forwardRef<HTMLDivElement, PriorityEditDropD
     };
 
     const handleClick = (newValue: PriorityString) => {
-      console.log(newValue);
-
-      if (onChange) {
-        const event = {
-          target: { value: newValue },
-        } as unknown as React.ChangeEvent<HTMLInputElement>;
-        onChange(event);
-      }
+      setNewData(newValue);
     };
 
     return (

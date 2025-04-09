@@ -5,8 +5,9 @@ import { TextEditDropDown } from './Dropdowns/TextEditDropDown';
 import { DateEditDropDown } from './Dropdowns/DateEditDropDown';
 import { PriorityEditDropDown } from './Dropdowns/PriorityEditDropDown';
 import { LongTextEditDropDown } from './Dropdowns/LongTextEditDropDown';
+import { SelectAssigneeDropDown } from './Dropdowns/SelectAssigneeDropDown';
 
-type EditFieldVariants = 'priority' | 'text' | 'date' | 'longText';
+type EditFieldVariants = 'priority' | 'text' | 'date' | 'longText' | 'selector';
 
 interface EditFieldButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   icon?: ReactNode;
@@ -91,6 +92,9 @@ export const EditFieldButton: React.FC<EditFieldButtonProps> = ({
     case 'longText':
       EditFieldComponent = LongTextEditDropDown;
       break;
+    case 'selector':
+      EditFieldComponent = SelectAssigneeDropDown;
+      break;
     default:
       EditFieldComponent = TextEditDropDown;
   }
@@ -104,10 +108,7 @@ export const EditFieldButton: React.FC<EditFieldButtonProps> = ({
         <EditFieldComponent
           ref={dropDownRef as any}
           onBlur={handleBlur}
-          onChange={(e) => {
-            const target = e.target as HTMLInputElement;
-            setNewData(target.value);
-          }}
+          setNewData={(value) => setNewData(value)}
           value={editData}
         />
       )}

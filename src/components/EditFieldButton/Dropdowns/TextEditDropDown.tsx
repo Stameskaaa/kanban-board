@@ -1,22 +1,25 @@
 import { forwardRef, InputHTMLAttributes } from 'react';
 import styled from 'styled-components';
+import { DropDownContainer } from '../../../styles/mixins';
 
 const TextEditField = styled.input`
-  position: absolute;
-  box-sizing: border-box;
-  width: 100%;
-  border-radius: 12px;
-  padding: 16px;
-  background-color: rgba(255, 255, 255, 1);
-  box-shadow: 0px 4px 24px 0px rgba(0, 0, 0, 0.08);
-  z-index: 1;
-  top: calc(100% + 1px);
+  ${DropDownContainer}
 `;
 
-interface TextEditDropDownProps extends InputHTMLAttributes<HTMLInputElement> {}
+interface TextEditDropDownProps extends InputHTMLAttributes<HTMLInputElement> {
+  setNewData: (value: string) => void;
+}
 
 export const TextEditDropDown = forwardRef<HTMLInputElement, TextEditDropDownProps>(
-  ({ onBlur, onChange, value, ...rest }, ref) => {
-    return <TextEditField ref={ref} onBlur={onBlur} onChange={onChange} value={value} {...rest} />;
+  ({ onBlur, value, setNewData, ...rest }, ref) => {
+    return (
+      <TextEditField
+        ref={ref}
+        onBlur={onBlur}
+        onChange={(e) => setNewData(e.target.value)}
+        value={value}
+        {...rest}
+      />
+    );
   },
 );

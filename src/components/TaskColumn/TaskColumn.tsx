@@ -67,12 +67,13 @@ export const TaskColumn = ({
 
   const handleAddTask = () => {
     const randomId = Math.random().toString(36).substring(2, 9);
+    const now = new Date();
     dispatch(
       addTask({
         id: randomId,
         taskName: 'Новая задача',
         assigneeId: 1,
-        dueDate: '',
+        dueDate: `${now}`,
         priorityId: 0,
         description: '',
         statusId: Number(statusKey) as statuses,

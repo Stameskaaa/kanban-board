@@ -45,7 +45,7 @@ export const HeaderTitleEdit = styled.input`
   border-bottom: 1px solid rgba(187, 221, 214, 1);
 `;
 
-export const TrashButton = styled.button`
+export const IconButtonContainer = styled.button`
   cursor: pointer;
   ${flexCenter}
   margin-bottom: auto;

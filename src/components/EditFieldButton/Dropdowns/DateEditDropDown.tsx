@@ -1,28 +1,23 @@
 import { forwardRef, InputHTMLAttributes } from 'react';
 import styled from 'styled-components';
+import { DropDownContainer } from '../../../styles/mixins';
 
 const DateEditField = styled.input`
-  position: absolute;
-  box-sizing: border-box;
-  width: 100%;
-  border-radius: 12px;
-  padding: 16px;
-  background-color: rgba(255, 255, 255, 1);
-  box-shadow: 0px 4px 24px 0px rgba(0, 0, 0, 0.08);
-  z-index: 1;
-  top: calc(100% + 1px);
+  ${DropDownContainer}
 `;
 
-interface DateEditDropDownProps extends InputHTMLAttributes<HTMLInputElement> {}
+interface DateEditDropDownProps extends InputHTMLAttributes<HTMLInputElement> {
+  setNewData: (value: string) => void;
+}
 
 export const DateEditDropDown = forwardRef<HTMLInputElement, DateEditDropDownProps>(
-  ({ onBlur, onChange, value, ...rest }, ref) => {
+  ({ onBlur, setNewData, value, ...rest }, ref) => {
     return (
       <DateEditField
         type="date"
         ref={ref}
         onBlur={onBlur}
-        onChange={onChange}
+        onChange={(e) => setNewData(e.target.value)}
         value={value}
         {...rest}
       />

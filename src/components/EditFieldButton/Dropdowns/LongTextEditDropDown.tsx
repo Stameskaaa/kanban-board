@@ -1,30 +1,26 @@
 import { forwardRef, TextareaHTMLAttributes } from 'react';
 import styled from 'styled-components';
+import { DropDownContainer } from '../../../styles/mixins';
 
 const LongTextEditField = styled.textarea`
-  position: absolute;
-  box-sizing: border-box;
-  width: 100%;
-  border-radius: 12px;
-  padding: 16px;
-  background-color: rgba(255, 255, 255, 1);
-  box-shadow: 0px 4px 24px 0px rgba(0, 0, 0, 0.08);
-  z-index: 1;
-  top: calc(100% + 1px);
+  ${DropDownContainer}
   resize: none;
+  font-size: 14px;
 `;
 
-interface LongTextEditDropDownProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {}
+interface LongTextEditDropDownProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+  setNewData: (value: string) => void;
+}
 
 export const LongTextEditDropDown = forwardRef<HTMLTextAreaElement, LongTextEditDropDownProps>(
-  ({ onBlur, onChange, value, ...rest }, ref) => {
+  ({ onBlur, setNewData, value, ...rest }, ref) => {
     return (
       <LongTextEditField
         ref={ref}
         onBlur={onBlur}
-        onChange={onChange}
+        onChange={(e) => setNewData(e.target.value)}
         value={value}
-        rows={4}
+        rows={3}
         {...rest}
       />
     );
