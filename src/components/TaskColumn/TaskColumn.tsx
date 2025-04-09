@@ -9,6 +9,7 @@ import { RootState } from '../../store';
 import { PlusIcon } from '../../icons/PlusIcon';
 import { statuses, Task } from '../../types/types';
 import { addTask } from '../../store/taskSlice';
+import { Droppable } from '@hello-pangea/dnd';
 
 const Container = styled.div`
   ${flexColumn}
@@ -35,7 +36,6 @@ const Body = styled.div<{ bgColor: string }>`
   gap: 16px;
   overflow-y: auto;
   min-height: calc(100% - 45px);
-
   border-radius: 20px;
   padding: 12px;
   background-color: ${({ bgColor }) => bgColor};
@@ -81,35 +81,39 @@ export const TaskColumn = ({
   };
 
   return (
-    <Container>
-      <Header>
-        <Lozenge text={title} icon={icon} bgColor={badgeBgColor} color={badgeColor} />
-        <Count>{filteredTasks.length}</Count>
-      </Header>
-
-      <Body bgColor={bgColor}>
-        {filteredTasks.map((task) => (
-          <TaskComponent
-            taskId={task.id}
-            icon={Lozenge}
-            iconProps={{
-              text: title,
-              icon: icon,
-              bgColor: badgeBgColor,
-              color: badgeColor,
-            }}
-            key={task.id}
-            {...task}
-          />
-        ))}
-
-        <AddTaskButton
-          icon={<PlusIcon />}
-          buttonText="Новая задача"
-          color={buttonColor}
-          onClick={handleAddTask}
-        />
-      </Body>
-    </Container>
+    <Droppable droppableId={statusKey}>
+      {(provided) => (
+        <Container ref={provided.innerRef} {...provided.droppableProps}>
+          <Header>
+            <Lozenge text={title} icon={icon} bgColor={badgeBgColor} color={badgeColor} />
+            <Count>{filteredTasks.length}</Count>
+          </Header>
+          <Body bgColor={bgColor}>
+            {filteredTasks.map((task: Task, index: number) => (
+              <TaskComponent
+                index={index}
+                taskId={task.id}
+                icon={Lozenge}
+                iconProps={{
+                  text: title,
+                  icon: icon,
+                  bgColor: badgeBgColor,
+                  color: badgeColor,
+                }}
+                key={task.id}
+                {...task}
+              />
+            ))}
+            {provided.placeholder}
+            <AddTaskButton
+              icon={<PlusIcon />}
+              buttonText="Новая задача"
+              color={buttonColor}
+              onClick={handleAddTask}
+            />
+          </Body>
+        </Container>
+      )}
+    </Droppable>
   );
 };

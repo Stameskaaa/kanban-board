@@ -8,6 +8,7 @@ export const Container = styled.div`
   gap: 16px;
   border-radius: 16px;
   padding: 16px;
+  user-select: none;
   background-color: rgba(255, 255, 255, 1);
   border: 1px solid rgba(187, 221, 214, 1);
 `;

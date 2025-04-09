@@ -12,7 +12,7 @@ interface EditFieldButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElem
   icon?: ReactNode;
   buttonText: string;
   editData: string;
-  setNewData: (newText: string) => void;
+  setNewData: (newData: string) => void;
   variant: EditFieldVariants;
 }
 

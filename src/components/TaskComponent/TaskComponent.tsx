@@ -12,9 +12,11 @@ import { LozengeProps, Task } from '../../types/types';
 import { TASK_DICTIONARY } from '../../constants/taskDictionary';
 import { useDispatch } from 'react-redux';
 import { deleteTask, updateTask } from '../../store/taskSlice';
+import { Draggable } from '@hello-pangea/dnd';
 
 interface ExtendedTask extends Task {
   taskId: string;
+  index: number;
   icon: React.ComponentType<any>;
   iconProps: LozengeProps;
 }
@@ -28,6 +30,7 @@ export const TaskComponent: React.FC<ExtendedTask> = ({
   priorityId,
   icon: Icon,
   iconProps,
+  index,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const dispatch = useDispatch();
@@ -43,8 +46,6 @@ export const TaskComponent: React.FC<ExtendedTask> = ({
       newValue = isNaN(parsedValue) ? value : parsedValue;
     }
 
-    console.log(newValue);
-
     dispatch(updateTask({ id: taskId, updatedTask: { [field]: newValue } }));
   };
 
@@ -53,76 +54,94 @@ export const TaskComponent: React.FC<ExtendedTask> = ({
   };
 
   return (
-    <Styled.Container onDoubleClick={() => setIsEditing((prev) => !prev)}>
-      <Styled.Header>
-        <SuccessIcon />
-        {!isEditing ? (
-          <Styled.HeaderTitle>{taskName}</Styled.HeaderTitle>
-        ) : (
-          <Styled.HeaderTitleEdit
-            value={taskName}
-            onChange={(e) => handleFieldChange('taskName', e.target.value)}
-          />
-        )}
-        <Styled.TrashButton onClick={handleDeleteTask}>
-          <TrashIcon />
-        </Styled.TrashButton>
-      </Styled.Header>
+    <Draggable draggableId={taskId} index={index}>
+      {(provided, snapshot) => (
+        <div
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          style={{
+            ...provided.draggableProps.style,
+            marginBottom: '8px',
+            borderColor: snapshot.isDragging ? 'rgba(83, 123, 243, 1)' : 'transparent',
+            borderWidth: '1px',
+            borderStyle: 'solid',
+            opacity: snapshot.isDragging ? 0.8 : 1,
+            borderRadius: '16px',
+          }}>
+          <Styled.Container onDoubleClick={() => setIsEditing((prev) => !prev)}>
+            <Styled.Header>
+              <SuccessIcon />
+              {!isEditing ? (
+                <Styled.HeaderTitle>{taskName}</Styled.HeaderTitle>
+              ) : (
+                <Styled.HeaderTitleEdit
+                  value={taskName}
+                  onChange={(e) => handleFieldChange('taskName', e.target.value)}
+                />
+              )}
+              <Styled.TrashButton onClick={handleDeleteTask}>
+                <TrashIcon />
+              </Styled.TrashButton>
+            </Styled.Header>
 
-      {!isEditing ? (
-        <>
-          <Styled.AssigneeInfo>
-            {assignee?.length > 0 && (
-              <Styled.NameContainer>
-                <Styled.Circle>{assignee.charAt(0).toLocaleUpperCase()}</Styled.Circle>{' '}
-                <Styled.Name>{assignee}</Styled.Name>
-              </Styled.NameContainer>
+            {!isEditing ? (
+              <>
+                <Styled.AssigneeInfo>
+                  {assignee?.length > 0 && (
+                    <Styled.NameContainer>
+                      <Styled.Circle>{assignee.charAt(0).toLocaleUpperCase()}</Styled.Circle>{' '}
+                      <Styled.Name>{assignee}</Styled.Name>
+                    </Styled.NameContainer>
+                  )}
+                  <Styled.Point>•</Styled.Point>
+                  <Styled.Date>{dueDate}</Styled.Date>
+                </Styled.AssigneeInfo>
+                <Styled.TaskStatus>
+                  <Lozenge
+                    bgColor={TASK_DICTIONARY.prioritiesColors[priorityId].bgColor}
+                    color={TASK_DICTIONARY.prioritiesColors[priorityId].color}
+                    text={priority}
+                  />
+                  <Icon {...iconProps} />
+                </Styled.TaskStatus>
+                <Styled.TaskDescription>{description}</Styled.TaskDescription>
+              </>
+            ) : (
+              <div>
+                <EditFieldButton
+                  variant="text"
+                  icon={<UserIcon />}
+                  buttonText="Добавить ответственного"
+                  editData={assignee || ''}
+                  setNewData={(val) => handleFieldChange('assigneeId', val)}
+                />
+                <EditFieldButton
+                  variant="date"
+                  icon={<CalendarIcon />}
+                  buttonText="Добавить дату"
+                  editData={dueDate}
+                  setNewData={(val) => handleFieldChange('dueDate', val)}
+                />
+                <EditFieldButton
+                  variant="priority"
+                  icon={<ListOrderIcon />}
+                  buttonText="Добавить приоритет"
+                  editData={`${priorityId}` || '0'}
+                  setNewData={(val) => handleFieldChange('priorityId', val)}
+                />
+                <EditFieldButton
+                  variant="longText"
+                  icon={<NotePadIcon />}
+                  buttonText="Добавить описание"
+                  editData={description}
+                  setNewData={(val) => handleFieldChange('description', val)}
+                />
+              </div>
             )}
-            <Styled.Point>•</Styled.Point>
-            <Styled.Date>{dueDate}</Styled.Date>
-          </Styled.AssigneeInfo>
-          <Styled.TaskStatus>
-            <Lozenge
-              bgColor={TASK_DICTIONARY.prioritiesColors[priorityId].bgColor}
-              color={TASK_DICTIONARY.prioritiesColors[priorityId].color}
-              text={priority}
-            />
-            <Icon {...iconProps} />
-          </Styled.TaskStatus>
-          <Styled.TaskDescription>{description}</Styled.TaskDescription>
-        </>
-      ) : (
-        <div>
-          <EditFieldButton
-            variant="text"
-            icon={<UserIcon />}
-            buttonText="Добавить ответственного"
-            editData={assignee || ''}
-            setNewData={(val) => handleFieldChange('assigneeId', val)}
-          />
-          <EditFieldButton
-            variant="date"
-            icon={<CalendarIcon />}
-            buttonText="Добавить дату"
-            editData={dueDate}
-            setNewData={(val) => handleFieldChange('dueDate', val)}
-          />
-          <EditFieldButton
-            variant="priority"
-            icon={<ListOrderIcon />}
-            buttonText="Добавить приоритет"
-            editData={`${priorityId}` || '0'}
-            setNewData={(val) => handleFieldChange('priorityId', val)}
-          />
-          <EditFieldButton
-            variant="longText"
-            icon={<NotePadIcon />}
-            buttonText="Добавить описание"
-            editData={description}
-            setNewData={(val) => handleFieldChange('description', val)}
-          />
+          </Styled.Container>
         </div>
       )}
-    </Styled.Container>
+    </Draggable>
   );
 };

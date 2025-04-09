@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { initialTasks } from '../data/initialTasks';
-import { Task } from '../types/types';
+import { statuses, Task } from '../types/types';
 
 type TasksState = {
   tasks: Task[];
@@ -30,9 +30,52 @@ const tasksSlice = createSlice({
         state.tasks.splice(taskIndex, 1);
       }
     },
+    reorderTasks: (
+      state,
+      action: PayloadAction<{
+        sourceStatusId: number;
+        destinationStatusId: number;
+        sourceIndex: number;
+        destinationIndex: number;
+        taskId: string;
+      }>,
+    ) => {
+      const { sourceStatusId, destinationStatusId, sourceIndex, destinationIndex, taskId } =
+        action.payload;
+
+      // Если задача перемещается внутри одной колонки
+      if (sourceStatusId === destinationStatusId) {
+        const tasksInColumn = state.tasks.filter((task) => task.statusId === sourceStatusId);
+        const [movedTask] = tasksInColumn.splice(sourceIndex, 1);
+        tasksInColumn.splice(destinationIndex, 0, movedTask);
+
+        // Обновляем глобальный массив задач
+        const updatedTasks = state.tasks.filter((task) => task.statusId !== sourceStatusId);
+        state.tasks = [...updatedTasks, ...tasksInColumn];
+      } else {
+        // Если задача перемещается между колонками
+        const sourceTasks = state.tasks.filter((task) => task.statusId === sourceStatusId);
+        const destinationTasks = state.tasks.filter(
+          (task) => task.statusId === destinationStatusId,
+        );
+
+        // Удаляем задачу из исходной колонки
+        const [movedTask] = sourceTasks.splice(sourceIndex, 1);
+
+        // Обновляем статус задачи и добавляем её в целевую колонку
+        movedTask.statusId = destinationStatusId as statuses;
+        destinationTasks.splice(destinationIndex, 0, movedTask);
+
+        // Обновляем глобальный массив задач
+        const remainingTasks = state.tasks.filter(
+          (task) => task.statusId !== sourceStatusId && task.statusId !== destinationStatusId,
+        );
+        state.tasks = [...remainingTasks, ...sourceTasks, ...destinationTasks];
+      }
+    },
   },
 });
 
-export const { addTask, updateTask, deleteTask } = tasksSlice.actions;
+export const { addTask, updateTask, deleteTask, reorderTasks } = tasksSlice.actions;
 
 export default tasksSlice.reducer;
